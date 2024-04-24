@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Project;
 
 use Illuminate\Http\Request;
+use Models\Project;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class ProjectController extends Controller
     {
         $this->middleware('auth');
     }
-    
+
     public function index(){
 
         $userFirstName = DB::table('managements')
@@ -92,7 +93,7 @@ class ProjectController extends Controller
                 'status' => $status,
                 'updated_at' => now()
             ]);
-    
+
         if ($updateStatus) {
             return redirect()->back();
         } else {
@@ -153,4 +154,74 @@ class ProjectController extends Controller
         // Redirect to the customer's profile page with the updated data
         return redirect()->back()->with('success', 'Customer updated successfully!');
     }
+
+    public function storeProject(Request $request)
+    {
+        $projectTitle = $request->input('projectTitle');
+        $projectType = $request->input('projectType');
+        $propertyAddress = $request->input('propertyAddress');
+        $propertyCity = $request->input('propertyCity');
+        $propertyPostcode = $request->input('propertyPostcode');
+        $propertyState = $request->input('propertyState');
+        $projectURL = $request->input('projectURL');
+        $propertyLatitude = $request->input('propertyLatitude');
+        $propertyLongitude = $request->input('propertyLongitude');
+        $projectFacilities = $request->input('projectFacilities');
+
+        $id = Str::random(30);
+
+        // Handle logo upload
+        if ($request->hasFile('file')) {
+            $logo = $request->file('file');
+            $logoName = $id . '_' . $logo->getClientOriginalName();
+            $logo->storeAs('logos', $logoName, 'public'); // Assuming you want to store logos in the 'storage/app/public/logos' directory
+        } else {
+            $logoName = null;
+        }
+
+        // Handle brochure uploads
+        if ($request->hasFile('photo_additional')) {
+            $brochures = [];
+            foreach ($request->file('photo_additional') as $key => $brochure) {
+                $brochureName = $id . '_' . $key . '_' . '.' . $brochure->getClientOriginalExtension();
+                $path = $brochure->storeAs('brochures', $brochureName, 'public'); // Assuming you want to store brochures in the 'storage/app/public/brochures' directory
+                $brochures[] = $path;
+            }
+        }else{
+            $brochures = NULL;
+        }
+
+        // Handle gallery uploads
+        if ($request->hasFile('second_photo_additional')) {
+            $galleryImages = [];
+            foreach ($request->file('second_photo_additional') as $key => $image) {
+                $imageName = $id . '_' . $key . '_' . '.' . $image->getClientOriginalExtension();
+                $path = $image->storeAs('gallery', $imageName, 'public'); // Assuming you want to store gallery images in the 'storage/app/public/gallery' directory
+                $galleryImages[] = $path;
+            }
+        }else{
+            $galleryImages = NULL;
+        }
+
+        DB::table('projects')->insert([
+            'id' => $id,
+            'project_name' => $projectTitle,
+            'project_type' => $projectType,
+            'address' => $propertyAddress,
+            'city' => $propertyCity,
+            'postcode' => $propertyPostcode,
+            'state' => $propertyState,
+            'website_url' => $projectURL ? $projectURL : null,
+            'latitude' => $propertyLatitude ? $propertyLatitude : null,
+            'longitude' => $propertyLongitude ? $propertyLongitude : null,
+            'facilities' => $projectFacilities,
+            'project_logo' => $logoName,
+            'brochure' => json_encode($brochures),
+            'gallery' => json_encode($galleryImages),
+            'created_at' => now()
+        ]);
+
+        return redirect()->back()->with('success','New Project Jas Been Added');
+    }
+
 }

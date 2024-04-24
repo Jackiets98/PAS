@@ -35,3 +35,4 @@ Route::get('/agentlist', [UserController::class, 'propertyAgent']);
 //Project Routes
 Route::get('/projectlist', [ProjectController::class, 'index']);
 Route::get('/addNewProject', [ProjectController::class, 'addNewProject']);
+Route::post('/storeProject', [ProjectController::class, 'storeProject']);

@@ -5,18 +5,147 @@
 @include('layout.header')
 
 
+<style>
+    div.dataTables_wrapper div.dataTables_filter {
+        margin-top: -17px;
+        margin-right: 8px;
+    }
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+
+    .upload__box {
+    padding: 40px;
+}
+
+.upload__inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+.upload__btn {
+    display: inline-block;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    min-width: 116px;
+    padding: 5px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid;
+    background-color: #4045ba;
+    border-color: #4045ba;
+    border-radius: 10px;
+    line-height: 26px;
+    font-size: 14px;
+}
+
+.upload__btn:hover {
+    background-color: unset;
+    color: #4045ba;
+    transition: all 0.3s ease;
+}
+
+.upload__btn-box {
+    margin-bottom: 10px;
+}
+
+.upload__img-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -10px;
+}
+
+.upload__img-box {
+    width: 200px;
+    padding: 0 10px;
+    margin-bottom: 12px;
+}
+
+.upload__img-close {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    text-align: center;
+    line-height: 24px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.upload__img-close:after {
+    content: "\2716";
+    font-size: 14px;
+    color: white;
+}
+
+p {
+  margin: 0;
+}
+
+.img-bg {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  padding-bottom: 100%;
+}
+
+#fileElem, #fileElem2 {
+    display: none;
+}
+
+#drop-area, #second-drop-area {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+#drop-area.highlight, #second-drop-area.highlight {
+    border-color: #4045ba; /* Change color on dragover */
+}
+
+#drop-area .button, #second-drop-area .button {
+    /* background-color: #4045ba;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s ease; */
+
+    display: none;
+}
+
+#drop-area .button:hover, #second-drop-area .button:hover {
+    /* background-color: #303593; Darken color on hover */
+    display: none;
+}
+</style>
+
       <!-- Content wrapper -->
       <div class="content-wrapper">
 
         <!-- Content -->
                   <div class="container-xxl flex-grow-1 container-p-y">
-            
-            <h4 class="py-3 mb-4">
-  <span class="text-muted fw-light">List /</span><span> Add Project</span>
-</h4>
+
 
 <div class="app-ecommerce">
-
+    <form action="{{ url('/storeProject') }}" method="POST" enctype="multipart/form-data">
+        @csrf
   <!-- Add Project -->
   <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3">
 
@@ -25,7 +154,7 @@
     </div>
     <div class="d-flex align-content-center flex-wrap gap-3">
       <button class="btn btn-outline-secondary">Discard</button>
-      <button type="submit" class="btn btn-primary">Publish Project</button>
+      <button type="submit" class="btn btn-primary">Add Project</button>
     </div>
   </div>
 
@@ -40,14 +169,14 @@
         </div>
         <div class="card-body">
           <div class="form-floating form-floating-outline mb-4">
-            <input type="text" class="form-control" placeholder="Project Name" name="projectTitle">
+            <input type="text" class="form-control" placeholder="Project Name" name="projectTitle" required>
             <label for="project-name">Name</label>
           </div>
 
           <div class="row mb-3">
             <div class="col">
               <div class="form-floating form-floating-outline">
-                <select name="propertyType" class="select2 form-select" data-allow-clear="true">
+                <select name="propertyType" class="select2 form-select" data-allow-clear="true" required>
                     <option disabled>Select Property Type</option>
                     <option value="10000">Flat/ Apartment</option>
                     <option value="10001">Residential House</option>
@@ -62,7 +191,7 @@
             </div>
             <div class="col">
               <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" placeholder="Property Address" name="propertyAddress">
+                <input type="text" class="form-control" placeholder="Property Address" name="propertyAddress" required>
                 <label for="property-address">Address</label>
               </div>
             </div>
@@ -71,7 +200,7 @@
           <div class="row mb-3">
             <div class="col">
                 <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="propertyCity" id="citySelect">
+                    <select class="form-select" name="propertyCity" id="citySelect" required>
                         <option value="" selected disabled>Choose a City</option>
                     </select>
                     <label for="property-address">City</label>
@@ -82,13 +211,13 @@
           <div class="row mb-3">
             <div class="col">
               <div class="form-floating form-floating-outline">
-                <input type="text" class="form-control" placeholder="Postcode" name="propertyPostcode">
+                <input type="text" class="form-control" placeholder="Postcode" name="propertyPostcode" required>
                 <label for="project-type">Postcode</label>
               </div>
             </div>
             <div class="col">
                 <div class="form-floating form-floating-outline">
-                    <select class="form-select" name="propertyState" id="propertyState">
+                    <select class="form-select" name="propertyState" id="propertyState" required>
                         <option value="" selected disabled>Choose a State</option>
                         <option value="Johor">Johor</option>
                         <option value="Kedah">Kedah</option>
@@ -165,7 +294,7 @@
         </div>
         <div class="card-body">
             <div id="second-drop-area">
-                <input type="file" id="second-fileElem" multiple accept="image/*" onchange="handleSecondFiles(this.files)">
+                <input type="file" id="second-fileElem" multiple accept="image/*" onchange="handleSecondFiles(this.files)" style="display: none">
                 <label class="button" for="second-fileElem">Select some files</label><br>
                 <label for="second-gallery" style="color: red;">Supported Format: jpeg, png, gif, svg | </label>
                 <label for="second-gallery" style="color: red;">Max Size: 3MB | </label>
@@ -177,11 +306,10 @@
         </div>
     </div>
 
-    <div id="second-preview" class="form-group row bg-light p-1">
-</div>
+    <div id="second-preview" class="form-group row bg-light p-1"></div>
       <!-- /Variants -->
       <!-- Inventory -->
-      
+
       <!-- /Inventory -->
     </div>
     <!-- /Second column -->
@@ -201,7 +329,7 @@
               <span class="needsclick btn btn-outline-primary d-inline" id="btnBrowse">Browse image</span>
             </div>
             <div class="fallback">
-              <input name="file" type="file" />
+              <input name="logo" type="file" />
             </div>
           </form>
         </div>
@@ -210,68 +338,12 @@
       <!-- Organize Card -->
       <div class="card mb-4">
         <div class="card-header">
-          <h5 class="card-title mb-0">Organize</h5>
+          <h5 class="card-title mb-0">Facilities</h5>
         </div>
         <div class="card-body">
-          <!-- Vendor -->
-          <div class="mb-3 col ecommerce-select2-dropdown">
-            <div class="form-floating form-floating-outline">
-              <select id="vendor" class="select2 form-select" data-placeholder="Select Vendor">
-                <option value="">Select Vendor</option>
-                <option value="men-clothing">Men's Clothing</option>
-                <option value="women-clothing">Women's-clothing</option>
-                <option value="kid-clothing">Kid's-clothing</option>
-              </select>
-              <label for="vendor">Vendor</label>
-            </div>
-          </div>
-          <!-- Category -->
-          <div class="mb-4 col ecommerce-select2-dropdown d-flex justify-content-between">
-            <div class="form-floating form-floating-outline w-100 me-3">
-              <select id="category-org" class="select2 form-select" data-placeholder="Select Category">
-                <option value="">Select Category</option>
-                <option value="Household">Household</option>
-                <option value="Management">Management</option>
-                <option value="Electronics">Electronics</option>
-                <option value="Office">Office</option>
-                <option value="Automotive">Automotive</option>
-              </select>
-              <label for="category-org">Category</label>
-            </div>
-            <div>
-              <button class="btn btn-outline-primary btn-icon btn-lg h-px-50">
-                <i class="mdi mdi-plus"></i>
-              </button>
-            </div>
-          </div>
-          <!-- Collection -->
-          <div class="mb-4 col ecommerce-select2-dropdown">
-            <div class="form-floating form-floating-outline">
-              <select id="collection" class="select2 form-select" data-placeholder="Collection">
-                <option value="">Collection</option>
-                <option value="men-clothing">Men's Clothing</option>
-                <option value="women-clothing">Women's-clothing</option>
-                <option value="kid-clothing">Kid's-clothing</option>
-              </select>
-              <label for="collection">Collection</label>
-            </div>
-          </div>
-          <!-- Status -->
-          <div class="mb-4 col ecommerce-select2-dropdown">
-            <div class="form-floating form-floating-outline">
-              <select id="status-org" class="select2 form-select" data-placeholder="Select Status">
-                <option value="">Select Status</option>
-                <option value="Published">Published</option>
-                <option value="Scheduled">Scheduled</option>
-                <option value="Inactive">Inactive</option>
-              </select>
-              <label for="status-org">Status</label>
-            </div>
-          </div>
-          <!-- Tags -->
           <div class="mb-3">
             <div class="form-floating form-floating-outline">
-              <input id="ecommerce-Project-tags" class="form-control h-auto" name="ecommerce-Project-tags" value="Normal,Standard,Premium" aria-label="Project Tags" />
+              <input id="ecommerce-Project-tags" class="form-control h-auto" name="projectFacilities" aria-label="Project Tags" />
               <label for="ecommerce-Project-tags">Tags</label>
             </div>
           </div>
@@ -279,6 +351,7 @@
       </div>
       <!-- /Organize Card -->
     </div>
+</form>
     <!-- /Second column -->
   </div>
 </div>
@@ -289,6 +362,13 @@
 
           @include('layout.footer')
 
+          <script>
+            // The DOM element you wish to replace with Tagify
+            var input = document.querySelector('input[name=projectFacilities]');
+
+            // initialize Tagify on the above input node reference
+            new Tagify(input)
+          </script>
 
           <script>
             fetch('https://countriesnow.space/api/v0.1/countries/cities', {
@@ -329,7 +409,7 @@
 
             // Prevent default drag behaviors
             ;['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropArea.addEventListener(eventName, preventDefaults, false)   
+            dropArea.addEventListener(eventName, preventDefaults, false)
             document.body.addEventListener(eventName, preventDefaults, false)
             })
 
@@ -395,6 +475,7 @@
             }
 
             function handleFiles(files) {
+                console.log("Selected files:", files);
                 files = [...files]
                 files.forEach(previewFile)
             }
@@ -411,12 +492,12 @@
                     //             <div class="card-body">
                     //                 <div class="d-flex align-items-start">
                     //                     <div class="w-100">
-                    //                         <img src="`+reader.result+`"> 
+                    //                         <img src="`+reader.result+`">
                     //                     </div>
                     //                 </div>
                     //             </div>
                     //         </div>`
-                    
+
                     // // document.getElementById('gallery').appendChild(img)
                     // $('#gallery').append(string);
 
@@ -446,10 +527,10 @@
                 for (let i = 0; i < fileList.length; i++) {
                     // if(fileList[i].name != fileName) {
                     //     dataTransfer.items.add(fileList[i])
-                    // }    
+                    // }
                     if(i != index) {
                         dataTransfer.items.add(fileList[i])
-                    }    
+                    }
                 }
 
                 // add the new Filelist to input
@@ -462,6 +543,7 @@
 
             // end drag n drop
         </script>
+
 
 <script>
     // drag n drop
@@ -558,7 +640,7 @@
         for (let i = 0; i < fileList.length; i++) {
             // if(fileList[i].name != fileName) {
             //     dataTransfer.items.add(fileList[i])
-            // }    
+            // }
             if (i != index) {
                 dataTransfer.items.add(fileList[i])
             }
