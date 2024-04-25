@@ -4,6 +4,12 @@
 
 @include('layout.header')
 
+<style>
+  .vertical-middle td {
+      vertical-align: middle;
+  }
+</style>
+
 
       <!-- Content wrapper -->
       <div class="content-wrapper">
@@ -95,21 +101,42 @@
     </div>
   </div>
   <div class="card-datatable table-responsive">
-    <table class="datatables-products table">
+    <table class="datatables-products table vertical-middle">
       <thead class="table-light">
         <tr>
-          <th></th>
-          <th></th>
-          <th>product</th>
-          <th>category</th>
-          <th>stock</th>
-          <th>sku</th>
-          <th>price</th>
-          <th>qty</th>
-          <th>status</th>
-          <th>actions</th>
+          <th style="display: none">Created At</th>
+          <th>Project Logo</th>
+          <th>Project Name</th>
+          <th>Project Type</th>
+          <th>Status</th>
+          <th>Action</th>
         </tr>
       </thead>
+      <tbody>
+        @foreach($projectList as $project)
+        <tr>
+            <td>
+                @if($project->project_logo)
+                <img src="{{ asset('logos/' . $project->project_logo) }}" alt="Project Logo" style="max-width: 50px; max-height: 50px;">
+                @else
+                <img src="{{ asset('logos/no_image.png') }}" alt="Project Logo" style="max-width: 50px; max-height: 50px;">
+                @endif
+            </td>
+            <td>{{ $project->project_name }}</td>
+            <td>{{ $project->project_type }}</td>
+            <td>
+                @if ($project->status == '1')
+                    <span class="badge badge-pill badge-success">Active</span>
+                @elseif ($project->status == '0')
+                    <span class="badge badge-pill badge-danger">Inactive</span>
+                @endif
+            </td>
+            <td>
+                <a href="{{url('/viewCustomer/'.$project->id)}}" class="btn btn-sm btn-info"><i class="fa fa-address-card"> View Details</i></a>
+            </td>
+        </tr>
+        @endforeach
+        </tbody>
     </table>
   </div>
 </div>

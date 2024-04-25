@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\File;
 
 class ProjectController extends Controller
 {
@@ -168,26 +169,36 @@ class ProjectController extends Controller
         $propertyLongitude = $request->input('propertyLongitude');
         $projectFacilities = $request->input('projectFacilities');
 
+            // Decode the JSON string received from the frontend
+        $jsonArray = json_decode($projectFacilities, true);
+
+        // Extract the 'value' field from each element and store in an array
+        $valuesArray = [];
+        foreach ($jsonArray as $item) {
+            $valuesArray[] = $item['value'];
+        }
+
         $id = Str::random(30);
 
         // Handle logo upload
-        if ($request->hasFile('file')) {
-            $logo = $request->file('file');
-            $logoName = $id . '_' . $logo->getClientOriginalName();
+        if ($request->hasFile('projectLogo')) {
+            $logo = $request->file('projectLogo');
+            $logoName = $id . '.' . $logo->getClientOriginalExtension();
             $logo->storeAs('logos', $logoName, 'public'); // Assuming you want to store logos in the 'storage/app/public/logos' directory
         } else {
-            $logoName = null;
+            $logoName = NULL;
         }
 
         // Handle brochure uploads
         if ($request->hasFile('photo_additional')) {
             $brochures = [];
             foreach ($request->file('photo_additional') as $key => $brochure) {
-                $brochureName = $id . '_' . $key . '_' . '.' . $brochure->getClientOriginalExtension();
-                $path = $brochure->storeAs('brochures', $brochureName, 'public'); // Assuming you want to store brochures in the 'storage/app/public/brochures' directory
-                $brochures[] = $path;
+                $brochureName = $id . '_' . $key . '.' . $brochure->getClientOriginalExtension();
+                $storagePath = 'brochures/'; // Relative path inside the 'public' directory
+                $path = $brochure->storeAs($storagePath, $brochureName, 'public'); // Save to the 'public' directory
+                $brochures[] = $storagePath . $brochureName; // Store the relative path in the array
             }
-        }else{
+        } else {
             $brochures = NULL;
         }
 
@@ -195,9 +206,10 @@ class ProjectController extends Controller
         if ($request->hasFile('second_photo_additional')) {
             $galleryImages = [];
             foreach ($request->file('second_photo_additional') as $key => $image) {
-                $imageName = $id . '_' . $key . '_' . '.' . $image->getClientOriginalExtension();
-                $path = $image->storeAs('gallery', $imageName, 'public'); // Assuming you want to store gallery images in the 'storage/app/public/gallery' directory
-                $galleryImages[] = $path;
+                $imageName = $id . '_' . $key . '.' . $image->getClientOriginalExtension();
+                $storagePath = 'gallery/'; // Relative path inside the 'public' directory
+                $path = $image->storeAs($storagePath, $imageName, 'public'); // Assuming you want to store gallery images in the 'storage/app/public/gallery' directory
+                $galleryImages[] =  $storagePath . $imageName;
             }
         }else{
             $galleryImages = NULL;
@@ -214,8 +226,9 @@ class ProjectController extends Controller
             'website_url' => $projectURL ? $projectURL : null,
             'latitude' => $propertyLatitude ? $propertyLatitude : null,
             'longitude' => $propertyLongitude ? $propertyLongitude : null,
-            'facilities' => $projectFacilities,
+            'facilities' => json_encode($valuesArray),
             'project_logo' => $logoName,
+            'status' => '1',
             'brochure' => json_encode($brochures),
             'gallery' => json_encode($galleryImages),
             'created_at' => now()

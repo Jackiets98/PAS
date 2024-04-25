@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 
 <html lang="en" class="light-style layout-compact layout-navbar-fixed layout-menu-fixed     " dir="ltr" data-theme="theme-default" data-assets-path="https://demos.pixinvent.com/materialize-html-laravel-admin-template/demo/assets/" data-base-url="https://demos.pixinvent.com/materialize-html-laravel-admin-template/demo-1" data-framework="laravel" data-template="vertical-menu-theme-default-light">
@@ -6,133 +8,144 @@
 
 
 <style>
-    div.dataTables_wrapper div.dataTables_filter {
-        margin-top: -17px;
-        margin-right: 8px;
-    }
+  div.dataTables_wrapper div.dataTables_filter {
+      margin-top: -17px;
+      margin-right: 8px;
+  }
 
-    input[type=number]::-webkit-inner-spin-button,
-    input[type=number]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-    }
+  input[type=number]::-webkit-inner-spin-button, 
+  input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+  }
 
-    .upload__box {
-    padding: 40px;
+  .upload__box {
+  padding: 40px;
 }
 
 .upload__inputfile {
-    width: 0.1px;
-    height: 0.1px;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    z-index: -1;
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
 }
 
 .upload__btn {
-    display: inline-block;
-    font-weight: 600;
-    color: #fff;
-    text-align: center;
-    min-width: 116px;
-    padding: 5px;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    border: 2px solid;
-    background-color: #4045ba;
-    border-color: #4045ba;
-    border-radius: 10px;
-    line-height: 26px;
-    font-size: 14px;
+  display: inline-block;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  min-width: 116px;
+  padding: 5px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 2px solid;
+  background-color: #4045ba;
+  border-color: #4045ba;
+  border-radius: 10px;
+  line-height: 26px;
+  font-size: 14px;
 }
 
 .upload__btn:hover {
-    background-color: unset;
-    color: #4045ba;
-    transition: all 0.3s ease;
+  background-color: unset;
+  color: #4045ba;
+  transition: all 0.3s ease;
 }
 
 .upload__btn-box {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .upload__img-wrap {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 -10px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
 }
 
 .upload__img-box {
-    width: 200px;
-    padding: 0 10px;
-    margin-bottom: 12px;
+  width: 200px;
+  padding: 0 10px;
+  margin-bottom: 12px;
 }
 
 .upload__img-close {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    text-align: center;
-    line-height: 24px;
-    z-index: 1;
-    cursor: pointer;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  text-align: center;
+  line-height: 24px;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .upload__img-close:after {
-    content: "\2716";
-    font-size: 14px;
-    color: white;
+  content: "\2716";
+  font-size: 14px;
+  color: white;
 }
 
 p {
-  margin: 0;
+margin: 0;
 }
 
 .img-bg {
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  position: relative;
-  padding-bottom: 100%;
+background-repeat: no-repeat;
+background-position: center;
+background-size: cover;
+position: relative;
+padding-bottom: 100%;
 }
 
-#fileElem, #fileElem2 {
-    display: none;
+#fileElem, #second-fileElem {
+  display: none;
 }
 
 #drop-area, #second-drop-area {
-    border: 2px dashed #ccc;
-    border-radius: 5px;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.3s ease;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
 }
 
-#drop-area.highlight, #second-drop-area.highlight {
-    border-color: #4045ba; /* Change color on dragover */
+#drop-area.highlight {
+  border-color: #4045ba; /* Change color on dragover */
 }
 
-#drop-area .button, #second-drop-area .button {
-    /* background-color: #4045ba;
-    color: #fff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    display: inline-block;
-    cursor: pointer;
-    transition: background-color 0.3s ease; */
+#drop-area .button {
+  /* background-color: #4045ba;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s ease; */
 
-    display: none;
 }
 
-#drop-area .button:hover, #second-drop-area .button:hover {
-    /* background-color: #303593; Darken color on hover */
-    display: none;
+#drop-area .button:hover {
+  /* background-color: #303593; Darken color on hover */
+
+}
+
+.preview-container {
+    width: 100%;
+    height: 200px; /* Adjust height as needed */
+    overflow: hidden;
+    margin-bottom: 10px; /* Adjust margin as needed */
+}
+
+#file-preview {
+    width: 200px;
+    height: 200px;
 }
 </style>
 
@@ -176,7 +189,7 @@ p {
           <div class="row mb-3">
             <div class="col">
               <div class="form-floating form-floating-outline">
-                <select name="propertyType" class="select2 form-select" data-allow-clear="true" required>
+                <select name="projectType" class="select2 form-select" data-allow-clear="true" required>
                     <option disabled>Select Property Type</option>
                     <option value="10000">Flat/ Apartment</option>
                     <option value="10001">Residential House</option>
@@ -322,17 +335,13 @@ p {
           <h5 class="mb-0 card-title">Logo</h5>
         </div>
         <div class="card-body">
-          <form action="/upload" class="dropzone needsclick" id="dropzone-basic">
-            <div class="dz-message needsclick my-5">
-              Drag and drop media
-              <small class="text-muted d-block fs-6 my-2">or</small>
-              <span class="needsclick btn btn-outline-primary d-inline" id="btnBrowse">Browse image</span>
-            </div>
-            <div class="fallback">
-              <input name="logo" type="file" />
-            </div>
-          </form>
-        </div>
+          <div class="preview-container">
+              <center><img id="file-preview" src="#" alt="Preview" style="display: none;" /></center>
+          </div>
+          <div class="fallback">
+              <input id="file-input" name="projectLogo" type="file" onchange="previewingFile()" />
+          </div>
+      </div>
       </div>
       <!-- /Pricing Card -->
       <!-- Organize Card -->
@@ -501,11 +510,11 @@ p {
                     // // document.getElementById('gallery').appendChild(img)
                     // $('#gallery').append(string);
 
-                    var html = `<div class="mx-1 row ">
-                                    <div class="card" style="padding: .20rem .20rem; margin: .20rem .20rem;">
+                    var html = `<div class="col-6">
+                                    <div class="card" style="padding: .20rem .20rem; margin: .20rem .20rem; position:relative;">
                                         <div class="card-body">
                                             <button type="button" class="btn btn-danger remove-file" onclick="removeFile(this)">X</button>
-                                            <img src="`+reader.result+`" alt="" style="width: auto; height: 200px; object-fit: contain;" data-file-name="`+file.name+`">
+                                            <img src="${reader.result}" alt="" style="width: 200px; height: 200px; margin-top: 5px; margin-left: 30px; object-fit: contain;" data-file-name="${file.name}">
                                         </div>
                                     </div>
                                 </div>`
@@ -614,14 +623,14 @@ p {
         let reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onloadend = function() {
-            var html = `<div class="mx-1 row ">
-                            <div class="card" style="padding: .20rem .20rem; margin: .20rem .20rem;">
-                                <div class="card-body">
-                                    <button type="button" class="btn btn-danger remove-file" onclick="removeSecondFile(this)">X</button>
-                                    <img src="` + reader.result + `" alt="" style="width: auto; height: 200px; object-fit: contain;" data-file-name="` + file.name + `">
-                                </div>
-                            </div>
-                        </div>`
+            var html = `<div class="col-6">
+                                    <div class="card" style="padding: .20rem .20rem; margin: .20rem .20rem; position:relative;">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-danger remove-file" onclick="removeSecondFile(this)">X</button>
+                                            <img src="${reader.result}" alt="" style="width: 200px; height: 200px; margin-top: 5px; margin-left: 30px; object-fit: contain;" data-file-name="${file.name}">
+                                        </div>
+                                    </div>
+                                </div>`
 
             $('#second-preview').append(html)
         }
@@ -655,6 +664,27 @@ p {
     // end drag n drop
 </script>
 
+<script>
+  function previewingFile() {
+    var preview = document.getElementById('file-preview');
+    var fileInput = document.getElementById('file-input').files[0];
+    var reader = new FileReader();
+
+    reader.onloadend = function () {
+        preview.src = reader.result;
+        preview.style.display = 'block';
+    }
+
+    if (fileInput) {
+        reader.readAsDataURL(fileInput);
+    } else {
+        preview.src = '#';
+        preview.style.display = 'none';
+    }
+}
+</script>
+
 </body>
 
 </html>
+
