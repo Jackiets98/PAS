@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log; 
 
 class ProjectController extends Controller
 {
@@ -59,7 +60,7 @@ class ProjectController extends Controller
         return view('project.add', compact('userFirstName','userLastName','userRole'));
     }
 
-    public function viewCustomerDetails($id)
+    public function viewProjectDetails($id)
     {
         $userFirstName = DB::table('managements')
         ->pluck('first_name')
@@ -73,17 +74,33 @@ class ProjectController extends Controller
         ->pluck('role')
         ->first();
 
-        $userDetails = DB::table('customers')
+        $projectDetails = DB::table('projects')
         ->where('id',"=", $id)
         ->select('*')
         ->get();
 
-        $userDetailsForEditing = DB::table('customers')
+        $projectDetailsForEditing = DB::table('projects')
         ->where('id',"=", $id)
         ->select('*')
         ->get();
 
-        return view('customer.view', compact('userFirstName','userLastName','userRole','userDetails','userDetailsForEditing'));
+        $projectBrochures = DB::table('projects')
+            ->where('id', $id)
+            ->pluck('brochure')
+            ->first(); 
+
+        $projectGallery = DB::table('projects')
+        ->where('id', $id)
+        ->pluck('gallery')
+        ->first(); 
+
+        // Decode the JSON string into a PHP array
+        $projectBrochuresArray = json_decode($projectBrochures, true);
+        // Decode the JSON string into a PHP array
+        $galleryImagesArray = json_decode($projectGallery, true);
+
+
+        return view('project.view', compact('userFirstName', 'userLastName', 'userRole', 'projectDetails', 'projectDetailsForEditing', 'projectBrochuresArray','galleryImagesArray','id'));
     }
 
     public function updateStatus($id, $status)
@@ -237,4 +254,42 @@ class ProjectController extends Controller
         return redirect()->back()->with('success','New Project Jas Been Added');
     }
 
+    public function removeBrochure(Request $request)
+    {
+        // Get the image name and ID from the request
+        $imageName = $request->imageName;
+        $arrayName = 'brochures/' . $imageName;
+        $id = $request->id;
+    
+        // Fetch the current array of image names from the database
+        $project = DB::table('projects')->where('id', $id)->first();
+    
+        if ($project) {
+            // Decode the JSON string into a PHP array
+            $brochures = json_decode($project->brochure, true);
+    
+            // Find the index of the image name to be removed
+            $index = array_search($arrayName, $brochures);
+    
+            // If the image name exists in the array, remove it
+            if ($index !== false) {
+                unset($brochures[$index]);
+    
+                // Re-index the array to fix the keys
+                $brochures = array_values($brochures);
+    
+                // Encode the modified array back to JSON
+                $updatedBrochures = json_encode($brochures);
+    
+                // Update the database column with the modified array
+                DB::table('projects')->where('id', $id)->update(['brochure' => $updatedBrochures]);
+    
+                return response()->json(['message' => 'Image removed successfully'], 200);
+            } else {
+                return response()->json(['error' => 'Image not found'], 404);
+            }
+        } else {
+            return response()->json(['error' => 'Project not found'], 404);
+        }
+    }
 }

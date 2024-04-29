@@ -36,3 +36,5 @@ Route::get('/agentlist', [UserController::class, 'propertyAgent']);
 Route::get('/projectlist', [ProjectController::class, 'index']);
 Route::get('/addNewProject', [ProjectController::class, 'addNewProject']);
 Route::post('/storeProject', [ProjectController::class, 'storeProject']);
+Route::get('/viewProject/{id}', [ProjectController::class, 'viewProjectDetails']);
+Route::post('/remove-brochure', [ProjectController::class, 'removeBrochure'])->name('remove.brochure');

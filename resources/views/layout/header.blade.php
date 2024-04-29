@@ -1,7 +1,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
-
+  <meta name="csrf-token" content="{{ csrf_token() }}">
   <title>Property Agent System Admin Portal</title>
   <meta name="description" content="Materialize – is the most developer friendly &amp; highly customizable Admin Dashboard Template." />
   <meta name="keywords" content="dashboard, material, material design, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">

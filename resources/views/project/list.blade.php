@@ -132,7 +132,7 @@
                 @endif
             </td>
             <td>
-                <a href="{{url('/viewCustomer/'.$project->id)}}" class="btn btn-sm btn-info"><i class="fa fa-address-card"> View Details</i></a>
+                <a href="{{url('/viewProject/'.$project->id)}}" class="btn btn-sm btn-info"><i class="fa fa-address-card"> View Details</i></a>
             </td>
         </tr>
         @endforeach
